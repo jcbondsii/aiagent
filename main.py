@@ -12,8 +12,13 @@ client = genai.Client(api_key = api_key)
 model = "gemini-2.5-flash"
 contents = "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum."
 
+cmg_c = client.models.generate_content(model=model, contents=contents)
+text = cmg_c.text
+x = cmg_c.usage_metadata.prompt_token_count
+y = cmg_c.usage_metadata.candidates_token_count
+
 def main():
-    print(client.models.generate_content(model=model, contents=contents).text)
+    print(f"Contents: {contents}\nPrompt tokens: {x}\nResponse tokens: {y}\nResponse: {text}")
 
 
 if __name__ == "__main__":
