@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from google import genai
+from google.genai import types
 import argparse
 
 load_dotenv()
@@ -15,9 +16,12 @@ parser = argparse.ArgumentParser(description="Chatbot")
 parser.add_argument("user_prompt", type = str, help="User prompt")
 args = parser.parse_args()
 
+#used for single prompt input
 contents = args.user_prompt
+#used for multiple prompt input
+messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
 
-cmg_c = client.models.generate_content(model=model, contents=contents)
+cmg_c = client.models.generate_content(model=model, contents=messages)
 text = cmg_c.text
 x = cmg_c.usage_metadata.prompt_token_count
 y = cmg_c.usage_metadata.candidates_token_count
