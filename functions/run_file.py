@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+from google.genai import types
+
 def run_python_file(working_directory, file_path, args=None):
     try:
         # Resolve absolute paths
@@ -29,3 +31,23 @@ def run_python_file(working_directory, file_path, args=None):
             return f'STDOUT:\n{completed.stdout}\nSTDERR:\n{completed.stderr}'
     except Exception as e:
         return f'Error executing file "{file_path}": {e}'
+    
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="Lists the content of a specified file relative to the working directory",
+    parameters=types.Schema(
+        required=["file_path"],
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="Directory path to list files from, relative to the working directory (default is the working directory itself)",
+            ),
+            "args": types.Schema(
+                type=types.Type.ARRAY,
+                description="Optional list of arguments to pass to the Python file when executing",
+                items=types.Schema(type=types.Type.STRING),
+            ),
+        },
+    ),
+)
